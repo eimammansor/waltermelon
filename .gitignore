@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# Node
+node_modules/
+dist/
+.eslintcache
+
+# Project Specific
+data/
+logs/
+config/token.json
