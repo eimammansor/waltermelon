@@ -1,17 +1,43 @@
-from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+from typing import Optional
 
 class WorkflowBase(BaseModel):
     name: str
+    description: Optional[str] = None
     trigger_type: str
-    definition: Dict[str, Any]  # The logic tree
-    is_active: Optional[bool] = True
+    trigger_config: Optional[str] = None
+    actions: Optional[str] = None
+    enabled: bool = True
 
 class WorkflowCreate(WorkflowBase):
     pass
 
-class WorkflowRead(WorkflowBase):
-    id: int
+class WorkflowUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    enabled: Optional[bool] = None
+    trigger_type: Optional[str] = None
+    trigger_config: Optional[str] = None
+    actions: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+class Workflow(WorkflowBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+    
+    model_config = ConfigDict(from_attributes=True)
+
+# Task Log Schemas
+class TaskLogBase(BaseModel):
+    workflow_id: Optional[int] = None
+    status: str
+    error_message: Optional[str] = None
+    execution_data: Optional[str] = None
+
+class TaskLog(TaskLogBase):
+    id: int
+    started_at: datetime
+    completed_at: Optional[datetime] = None
+    
+    model_config = ConfigDict(from_attributes=True)
